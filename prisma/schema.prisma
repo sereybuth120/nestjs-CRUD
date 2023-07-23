@@ -10,26 +10,45 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Auth {
+  id        Int      @id @default(autoincrement())
+  creatdeAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email String @unique
+  hash  String
+
+  @@map("auth")
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   creatdeAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  email String
+  email String @unique
   hash  String
 
   firstName     String?
   lastName      String?
-  age           Int
-  AccountNumber Int
+  age           Int?
+  AccountNumber Int?
+  files         Files[]
+
+  @@map("users")
 }
 
-model Bookmark {
+model Files {
   id        Int      @id @default(autoincrement())
   creatdeAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   title String
   desc  String?
-  link  String
+
+  // add relation between user and file
+  userId Int
+  user   User @relation(fields: [userId], references: [id]) // references to which user by id
+
+  @@map("files ")
 }
