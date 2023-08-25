@@ -1,0 +1,20 @@
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+
+import { PrismaModule } from './prisma/prisma.module';
+import { AuthModule } from './auth/auth.module';
+import { JwtStrategy } from './auth/strategy';
+import { UserController } from './user/user.controller';
+import { MinioModule } from './minio/minio.module';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    PrismaModule,
+    AuthModule,
+    MinioModule,
+  ],
+  providers: [JwtStrategy],
+  controllers: [UserController],
+})
+export class AppModule {}

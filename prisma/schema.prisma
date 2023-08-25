@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Auth {
+  id        Int      @id @default(autoincrement())
+  creatdeAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email String @unique
+  hash  String
+  firstName     String?
+  lastName      String?
+  age           Int?
+  AccountNumber Int?
+  @@map("auth")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  creatdeAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email String @unique
+  hash  String
+
+  firstName     String?
+  lastName      String?
+  age           Int?
+  AccountNumber Int?
+  files         Files[]
+
+  @@map("users")
+}
+
+model Files {
+  id        Int      @id @default(autoincrement())
+  creatdeAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title String
+  desc  String?
+
+  // add relation between user and file
+  userId Int
+  user   User @relation(fields: [userId], references: [id]) // references to which user by id
+
+  @@map("files ")
+}
+
